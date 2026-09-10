@@ -30,17 +30,20 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
   e.preventDefault();
 
   try {
-    const response = await fetch("http://localhost:5000/api/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/contact`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        }),
+      }
+    );
 
     const result = await response.json();
 
@@ -50,17 +53,20 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
       setTimeout(() => {
         setSubmitted(false);
         onClose();
-
-        setFormData({
-          name: "",
-          email: "",
-          service: "Landing Page Design",
-          budget: "$1k - $3k",
-          message: "",
-        });
       }, 2500);
+
+      setFormData({
+        name: "",
+        email: "",
+        service: "Landing Page Design",
+        budget: "$1k - $3k",
+        message: "",
+      });
+    } else {
+      alert("Something went wrong!");
     }
   } catch (error) {
+    console.error(error);
     alert("Backend se connect nahi ho paya!");
   }
 };
