@@ -26,15 +26,44 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      onClose();
-    }, 2500);
-  };
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
+  try {
+    const response = await fetch("http://localhost:5000/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      setSubmitted(true);
+
+      setTimeout(() => {
+        setSubmitted(false);
+        onClose();
+
+        setFormData({
+          name: "",
+          email: "",
+          service: "Landing Page Design",
+          budget: "$1k - $3k",
+          message: "",
+        });
+      }, 2500);
+    }
+  } catch (error) {
+    alert("Backend se connect nahi ho paya!");
+  }
+};
   return (
     <AnimatePresence>
       {isOpen && (
