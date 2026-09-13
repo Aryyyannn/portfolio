@@ -1,8 +1,9 @@
 "use client";
 
+
 import { useEffect, useMemo, useState } from "react";
 import { Search, Trash2, Users, CalendarDays, Mail, MessageSquare } from "lucide-react";
-
+const API = "https://portfolio-backend-lbox.onrender.com";
 interface Contact {
   _id: string;
   name: string;
@@ -17,7 +18,7 @@ export default function AdminPage() {
 
   // MongoDB se saare leads lana
   const loadContacts = async () => {
-    const res = await fetch("http://localhost:5000/api/contacts");
+    const res = await fetch(`${API}/api/contacts`);
     const data = await res.json();
     setContacts(data.data);
   };
@@ -46,7 +47,7 @@ export default function AdminPage() {
     const confirmDelete = confirm("Delete this lead?");
     if (!confirmDelete) return;
 
-    await fetch(`http://localhost:5000/api/contacts/${id}`, {
+    await fetch(`${API}/api/contacts/${id}`, {
       method: "DELETE",
     });
 
