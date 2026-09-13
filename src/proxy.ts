@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function proxy(req: NextRequest) {
-  if (!req.nextUrl.pathname.startsWith("/admin")) {
+  // Sirf /admin protect karo
+  if (req.nextUrl.pathname !== "/admin") {
     return NextResponse.next();
   }
 
@@ -29,5 +30,5 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin"],
 };
